@@ -1,56 +1,46 @@
 export module Classes;
 import std;
 
-using namespace std;
-
 export class Truck
 {
 private:
-    string model;
+    std::string model;          
     double payloadCapacity;
+
 public:
-    // Конструктор по умолчанию
-    Truck()
-    {
-        model = "MAX";
-        payloadCapacity = 2;
-    }
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹
+    Truck() : model("MAX"), payloadCapacity(2) {}
+    Truck(std::string m, double pc) : model{ std::move(m) }, payloadCapacity{ pc } {}
 
-    // Параметрический конструктор
-    Truck(string m, double pc) : model{ m }, payloadCapacity{ pc } {}
+    // Р”РµСЃС‚СЂСѓРєС‚РѕСЂ
+    ~Truck() = default;
 
-    //Деструктор
-    ~Truck() {};
-
-    // Геттеры
-    string getModel() const { return model; }
+    // Р“РµС‚С‚РµСЂС‹
+    std::string getModel() const { return model; }
     double getPayloadCapacity() const { return payloadCapacity; }
-
-    // Сеттеры
-    void setModel(string newModel) { if (newModel != "") model = newModel; }
+    // РЎРµС‚С‚РµСЂС‹
+    void setModel(std::string newModel) { if (!newModel.empty()) model = std::move(newModel); }
     void setPayloadCapacity(double newPayloadCap) { if (newPayloadCap > 0) payloadCapacity = newPayloadCap; }
 
-    // Информация по классу
     void getInfo() const
     {
-        std::print(cout, "Грузовик: \n");
-        std::print(cout, "Модель: {}\n", getModel());
-        std::print(cout, "Грузоподьемность: {}кг\n\n", getPayloadCapacity());
+        std::print(std::cout, "Р“СЂСѓР·РѕРІРёРє: \n");          
+        std::print(std::cout, "РњРѕРґРµР»СЊ: {}\n", getModel());
+        std::print(std::cout, "Р“СЂСѓР·РѕРїРѕРґСЉРµРјРЅРѕСЃС‚СЊ: {}С‚\n\n", getPayloadCapacity());
     }
 };
 
-// Функтор для трансформации
+// Р¤СѓРЅРєС‚РѕСЂ
 export class Transform
 {
 private:
     double coef;
 public:
-    // Конструктор функтора
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
     Transform(double c) : coef{ c } {}
-
-    // Сам метод для определения 
+    // РЎР°РјР° РѕРїРµСЂР°С†РёСЏ С„СѓРЅРєС‚РѕСЂР°
     Truck operator()(const Truck& truck) const
     {
-        return Truck(truck.getModel(), truck.getPayloadCapacity() * (coef+1));
+        return Truck(truck.getModel(), truck.getPayloadCapacity() * (coef + 1));
     }
 };

@@ -3,12 +3,10 @@ module VectorPart;
 import std;
 import Classes;
 
-using namespace std;
-
 void vectorWork()
 {
-    // Инициализация вектора данными 
-    vector<Truck> trucks;
+    // РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РІРµРєС‚РѕСЂР° РґР°РЅРЅС‹РјРё 
+    std::vector<Truck> trucks;
 
     trucks.emplace_back(Truck());
     trucks.emplace_back(Truck("MAN", 7));
@@ -16,77 +14,86 @@ void vectorWork()
     trucks.push_back(Truck("KAMAZ", 5));
     trucks.push_back(Truck("Ford", 6));
 
-    // Вспомогательная функция для печати всего вектора
-    auto printAll = [](const vector<Truck>& vec, string_view title) {
+    // Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ РґР»СЏ РїРµС‡Р°С‚Рё РІСЃРµРіРѕ РІРµРєС‚РѕСЂР°
+    auto printAll = [](const std::vector<Truck>& vec, std::string_view title) {
         std::println("=== {} ===", title);
-        if (vec.empty()) {
-            std::println("  (список пуст)");
+        if (vec.empty()) 
+        {
+            std::println("  (СЃРїРёСЃРѕРє РїСѓСЃС‚)");
         }
-        else {
-            for (size_t i = 0; const auto& t : vec) {
+        else
+        {
+            for (std::size_t i = 0; const auto& t : vec) 
+            {
                 std::print("[{}] ", ++i);
-                t.getInfo();  // getInfo() уже выводит модель и грузоподъёмность
+                t.getInfo();  // getInfo() СѓР¶Рµ РІС‹РІРѕРґРёС‚ РјРѕРґРµР»СЊ Рё РіСЂСѓР·РѕРїРѕРґСЉС‘РјРЅРѕСЃС‚СЊ
             }
         }
         std::println("");
         };
 
-    // Исходные данные
-    printAll(trucks, "Исходный список грузовиков");
+    // РСЃС…РѕРґРЅС‹Рµ РґР°РЅРЅС‹Рµ
+    printAll(trucks, "РСЃС…РѕРґРЅС‹Р№ СЃРїРёСЃРѕРє РіСЂСѓР·РѕРІРёРєРѕРІ");
 
     // 1. max_element
     auto maxTruck = std::max_element(trucks.begin(), trucks.end(),
-        [](const Truck& left, const Truck& right) {
+        [](const Truck& left, const Truck& right) 
+        {
             return left.getPayloadCapacity() < right.getPayloadCapacity();
         });
 
-    std::println("--- Грузовик с максимальной грузоподъёмностью ---");
-    if (maxTruck != trucks.end()) {
-        std::print("Самый грузоподъёмный: ");
+    std::println("--- Р“СЂСѓР·РѕРІРёРє СЃ РјР°РєСЃРёРјР°Р»СЊРЅРѕР№ РіСЂСѓР·РѕРїРѕРґСЉС‘РјРЅРѕСЃС‚СЊСЋ ---");
+    if (maxTruck != trucks.end()) 
+    {
+        std::print("РЎР°РјС‹Р№ РіСЂСѓР·РѕРїРѕРґСЉС‘РјРЅС‹Р№: ");
         maxTruck->getInfo();
     }
-    else {
-        std::println("Вектор пуст, максимум не определён.");
+    else 
+    {
+        std::println("Р’РµРєС‚РѕСЂ РїСѓСЃС‚, РјР°РєСЃРёРјСѓРј РЅРµ РѕРїСЂРµРґРµР»С‘РЅ.");
     }
     std::println("");
 
-    // 2. remove_if (перемещает элементы, не соответствующие условию, в конец)
+    // 2. remove_if (РїРµСЂРµРјРµС‰Р°РµС‚ СЌР»РµРјРµРЅС‚С‹, РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ СѓСЃР»РѕРІРёСЋ, РІ РєРѕРЅРµС†)
     auto newEnd = std::remove_if(trucks.begin(), trucks.end(),
         [](const Truck& truck) { return truck.getPayloadCapacity() < 5; });
 
-    // Именно ЗДЕСЬ происходит физическое удаление объектов (стирание)
+    // РРјРµРЅРЅРѕ Р—Р”Р•РЎР¬ РїСЂРѕРёСЃС…РѕРґРёС‚ С„РёР·РёС‡РµСЃРєРѕРµ СѓРґР°Р»РµРЅРёРµ РѕР±СЉРµРєС‚РѕРІ (СЃС‚РёСЂР°РЅРёРµ)
     trucks.erase(newEnd, trucks.end());
 
-    printAll(trucks, "После удаления грузовиков с грузоподъёмностью < 5");
+    printAll(trucks, "РџРѕСЃР»Рµ СѓРґР°Р»РµРЅРёСЏ РіСЂСѓР·РѕРІРёРєРѕРІ СЃ РіСЂСѓР·РѕРїРѕРґСЉС‘РјРЅРѕСЃС‚СЊСЋ < 5");
 
-    // 3. Transform (создаём новый вектор с изменённой грузоподъёмностью)
-    Transform truckTransform(0.1);   // функтор, умножающий грузоподъёмность на 0.1
-    vector<Truck> transformedTrucks;
+    // 3. Transform (СЃРѕР·РґР°С‘Рј РЅРѕРІС‹Р№ РІРµРєС‚РѕСЂ СЃ РёР·РјРµРЅС‘РЅРЅРѕР№ РіСЂСѓР·РѕРїРѕРґСЉС‘РјРЅРѕСЃС‚СЊСЋ)
+    Transform truckTransform(0.1);   // С„СѓРЅРєС‚РѕСЂ, СѓРјРЅРѕР¶Р°СЋС‰РёР№ РіСЂСѓР·РѕРїРѕРґСЉС‘РјРЅРѕСЃС‚СЊ РЅР° 0.1
+    std::vector<Truck> transformedTrucks;
     std::transform(trucks.begin(), trucks.end(),
         std::back_inserter(transformedTrucks),
         truckTransform);
 
-    printAll(transformedTrucks, "Трансформированные грузовики (грузоподъёмность * 1.1)");
+    printAll(transformedTrucks, "РўСЂР°РЅСЃС„РѕСЂРјРёСЂРѕРІР°РЅРЅС‹Рµ РіСЂСѓР·РѕРІРёРєРё (РіСЂСѓР·РѕРїРѕРґСЉС‘РјРЅРѕСЃС‚СЊ * 1.1)");
 
-    // 4. find_if (поиск по модели)
+    // 4. find_if (РїРѕРёСЃРє РїРѕ РјРѕРґРµР»Рё)
     auto foundTruck = std::find_if(trucks.begin(), trucks.end(),
         [](const Truck& truck) { return truck.getModel() == "MAN"; });
 
-    std::println("--- Поиск грузовика модели 'MAN' ---");
-    if (foundTruck != trucks.end()) {
-        std::print("Найден: ");
+    std::println("--- РџРѕРёСЃРє РіСЂСѓР·РѕРІРёРєР° РјРѕРґРµР»Рё 'MAN' ---");
+    if (foundTruck != trucks.end()) 
+    {
+        std::print("РќР°Р№РґРµРЅ: ");
         foundTruck->getInfo();
     }
-    else {
-        std::println("Грузовик модели 'MAN' не найден.");
+    else 
+    {
+        std::println("Р“СЂСѓР·РѕРІРёРє РјРѕРґРµР»Рё 'MAN' РЅРµ РЅР°Р№РґРµРЅ.");
     }
     std::println("");
 
-    // 5. sort (сортировка по возрастанию грузоподъёмности)
+    // 5. sort (СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ РіСЂСѓР·РѕРїРѕРґСЉС‘РјРЅРѕСЃС‚Рё)
     std::sort(trucks.begin(), trucks.end(),
-        [](const Truck& left, const Truck& right) {
+        [](const Truck& left, const Truck& right) 
+        {
             return left.getPayloadCapacity() < right.getPayloadCapacity();
         });
 
-    printAll(trucks, "После сортировки по возрастанию грузоподъёмности");
+    printAll(trucks, "РџРѕСЃР»Рµ СЃРѕСЂС‚РёСЂРѕРІРєРё РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ РіСЂСѓР·РѕРїРѕРґСЉС‘РјРЅРѕСЃС‚Рё");
 }

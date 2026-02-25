@@ -1,11 +1,9 @@
-﻿import std;
+import std;
 import VectorPart;
-
-using namespace std;
+import ListPart;
 
 int main()
 {
-	setlocale(0, "");
-	vectorWork();
+	listWork();
 }
 
