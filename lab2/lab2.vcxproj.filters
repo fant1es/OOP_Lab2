@@ -18,5 +18,14 @@
     <ClCompile Include="lab2.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="VectorPart.ixx">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorPart.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Classes.ixx">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
