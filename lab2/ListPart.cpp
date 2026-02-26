@@ -4,26 +4,28 @@ import Classes;
 
 void listWork()
 {
-    // Создаём список
-    std::list<Truck> truckList;
-
     // Лямбда для красивого вывода всего списка
     auto printList = [](const std::list<Truck>& lst, std::string_view title)
+    {
+        std::println("=== {} ===", title);
+
+        if (lst.empty())
+            std::println("  (список пуст)");
+        else
         {
-            std::println("=== {} ===", title);
-            if (lst.empty())
-                std::println("  (список пуст)");
-            else
+            int idx = 1;
+            for (const Truck& truck : lst)
             {
-                int idx = 1;
-                for (const Truck& truck : lst)
-                {
-                    std::print("[{}] ", idx++);
-                    truck.getInfo();
-                }
+                std::print("[{}] ", idx++);
+                truck.getInfo();
             }
-            std::println("");
-        };
+        }
+
+        std::println("");
+    };
+
+    // Создаём список
+    std::list<Truck> truckList;
 
     // Заполняем список
     truckList.emplace_back(Truck()); // MAN 2.0                     
@@ -60,9 +62,7 @@ void listWork()
         std::println("Первый элемент удалён.");
     }
     else
-    {
         std::println("Список пуст, удалять нечего.");
-    }
 
     printList(truckList, "Итоговое состояние списка");
 }

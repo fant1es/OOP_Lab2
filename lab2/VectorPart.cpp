@@ -17,20 +17,20 @@ void vectorWork()
     // Вспомогательная функция для печати всего вектора
     auto printAll = [](const std::vector<Truck>& vec, std::string_view title) {
         std::println("=== {} ===", title);
+
         if (vec.empty()) 
-        {
             std::println("  (список пуст)");
-        }
         else
         {
             for (std::size_t i = 0; const auto& t : vec) 
             {
                 std::print("[{}] ", ++i);
-                t.getInfo();  // getInfo() уже выводит модель и грузоподъёмность
+                t.getInfo();
             }
         }
+
         std::println("");
-        };
+    };
 
     // Исходные данные
     printAll(trucks, "Исходный список грузовиков");
@@ -38,9 +38,7 @@ void vectorWork()
     // 1. max_element
     auto maxTruck = std::max_element(trucks.begin(), trucks.end(),
         [](const Truck& left, const Truck& right) 
-        {
-            return left.getPayloadCapacity() < right.getPayloadCapacity();
-        });
+        { return left.getPayloadCapacity() < right.getPayloadCapacity(); });
 
     std::println("--- Грузовик с максимальной грузоподъёмностью ---");
     if (maxTruck != trucks.end()) 
@@ -49,9 +47,8 @@ void vectorWork()
         maxTruck->getInfo();
     }
     else 
-    {
         std::println("Вектор пуст, максимум не определён.");
-    }
+
     std::println("");
 
     // 2. remove_if (перемещает элементы, не соответствующие условию, в конец)
@@ -59,15 +56,16 @@ void vectorWork()
         [](const Truck& truck) { return truck.getPayloadCapacity() < 5; });
 
     // Именно ЗДЕСЬ происходит физическое удаление объектов (стирание)
+    // От newEnd до end
     trucks.erase(newEnd, trucks.end());
 
     printAll(trucks, "После удаления грузовиков с грузоподъёмностью < 5");
 
     // 3. Transform (создаём новый вектор с изменённой грузоподъёмностью)
-    Transform truckTransform(0.1);   // функтор, умножающий грузоподъёмность на 0.1
+    // Используем функтор
+    Transform truckTransform(0.1);   
     std::vector<Truck> transformedTrucks;
-    std::transform(trucks.begin(), trucks.end(),
-        std::back_inserter(transformedTrucks),
+    std::transform(trucks.begin(), trucks.end(), std::back_inserter(transformedTrucks),
         truckTransform);
 
     printAll(transformedTrucks, "Трансформированные грузовики (грузоподъёмность * 1.1)");
@@ -83,9 +81,8 @@ void vectorWork()
         foundTruck->getInfo();
     }
     else 
-    {
         std::println("Грузовик модели 'MAN' не найден.");
-    }
+
     std::println("");
 
     // 5. sort (сортировка по возрастанию грузоподъёмности)

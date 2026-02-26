@@ -18,10 +18,12 @@ public:
     // Геттеры
     std::string getModel() const { return model; }
     double getPayloadCapacity() const { return payloadCapacity; }
+    
     // Сеттеры
     void setModel(std::string newModel) { if (!newModel.empty()) model = std::move(newModel); }
     void setPayloadCapacity(double newPayloadCap) { if (newPayloadCap > 0) payloadCapacity = newPayloadCap; }
 
+    // Вывод информации
     void getInfo() const
     {
         std::print(std::cout, "Грузовик: \n");          
@@ -38,6 +40,7 @@ private:
 public:
     // Конструктор
     Transform(double c) : coef{ c } {}
+    
     // Сама операция функтора
     Truck operator()(const Truck& truck) const
     {
